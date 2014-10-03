@@ -1,9 +1,11 @@
-set(BIN welding)
+include_directories(${LCD_DIR})
+
+set(WELDER "welder")
 set(SOURCE
     main.cpp
     )
-add_executable(${BIN} ${SOURCE})
-add_dependencies(${BIN} lcd)
-target_link_libraries(${BIN} lcd)
+add_executable(${WELDER} ${SOURCE})
+add_dependencies(${WELDER} lcd)
+#target_link_libraries(${WELDER} lcd)
 
-avr_create_hex(${BIN})
+avr_create_hex(${WELDER})

@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.6.0)
 
-message("\nConfigure project Welding...")
+message("\nConfigure project Welder...")
 
 project(welding)
 
-set(CMAKE_SYSTEM_NAME Generic)
-
-set(CMAKE_C_COMPILER avr-gcc)
-set(CMAKE_CXX_COMPILER avr-g++)
+set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_SYSTEM_NAME "Generik")
+set(CMAKE_C_COMPILER "avr-gcc")
+set(CMAKE_CXX_COMPILER "avr-g++")
 
 set(CSTANDARD "-std=gnu11")
 set(CDEBUG "-gstabs")
@@ -16,6 +16,9 @@ set(CTUNING "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums")
 set(COPT "-Os")
 set(CMCU "-mmcu=atmega16")
 set(CDEFS "-DF_CPU=8000000UL")
+
+set(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
+set(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 
 set(CFLAGS "${CMCU} ${CDEBUG} ${CDEFS} ${CINCS} ${COPT} ${CWARN} ${CSTANDARD} ${CEXTRA}")
 set(CXXFLAGS "${CMCU} ${CDEFS} ${CINCS} ${COPT}")
@@ -33,8 +36,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BINARY_DIR}/lib)
 
-
-# create avr hex
 macro(avr_create_hex NAME_ELF)
     add_custom_command(
         TARGET ${NAME_ELF} POST_BUILD
