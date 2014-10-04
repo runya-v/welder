@@ -2,16 +2,16 @@
 
 #include <inttypes.h>
 
-#define LCD_RS  1     //define MCU pin connected to LCD RS
-#define LCD_RW  0     //define MCU pin connected to LCD R/W
+#define LCD_RS  4     //define MCU pin connected to LCD RS
+//#define LCD_RW  0     //define MCU pin connected to LCD R/W
 #define LCD_E   2     //define MCU pin connected to LCD E
 #define LCD_D4  4     //define MCU pin connected to LCD D3
 #define LCD_D5  5     //define MCU pin connected to LCD D4
 #define LCD_D6  6     //define MCU pin connected to LCD D5
 #define LCD_D7  7     //define MCU pin connected to LCD D6
-#define LDP     PORTD //define MCU port connected to LCD data pins
+#define LDP     PORTA //define MCU port connected to LCD data pins
 #define LCP     PORTB //define MCU port connected to LCD control pins
-#define LDDR    DDRD  //define MCU direction register for port connected to LCD data pins
+#define LDDR    DDRA  //define MCU direction register for port connected to LCD data pins
 #define LCDR    DDRB  //define MCU direction register for port connected to LCD control pins
 
 #define LCD_CLR             0 //DB0: clear display
@@ -47,22 +47,23 @@
 
 class Lcd {
 public:
+    Lcd();                                                  //Initializes LCD
+
     void sendChar(uint8_t);                                 //forms data ready to send to 74HC164
     void sendCommand(uint8_t);                              //forms data ready to send to 74HC164
-    void init(void);                                        //Initializes LCD
-    void clr(void);                                         //Clears LCD
-    void home(void);                                        //LCD cursor home
+    void clr();                                             //Clears LCD
+    void home();                                            //LCD cursor home
     void string(uint8_t*, uint8_t);                         //Outputs string to LCD
     void gotoXY(uint8_t, uint8_t);                          //Cursor to X Y position
     void copyStringToLcd(const uint8_t*, uint8_t, uint8_t); //copies flash string to LCD at x,y
-    void definechar(const uint8_t *,uint8_t);               //write char to LCD CGRAM
+    void defineChar(const uint8_t*, uint8_t);               //write char to LCD CGRAM
     void shiftRight(uint8_t);                               //shift by n characters Right
     void shiftLeft(uint8_t);                                //shift by n characters Left
-    void cursorOn(void);                                    //Underline cursor ON
-    void cursorOnBlink(void);                               //Underline blinking cursor ON
-    void cursorOff(void);                                   //Cursor OFF
-    void blank(void);                                       //LCD blank but not cleared
-    void visible(void);                                     //LCD visible
+    void cursorOn();                                        //Underline cursor ON
+    void cursorOnBlink();                                   //Underline blinking cursor ON
+    void cursorOff();                                       //Cursor OFF
+    void blank();                                           //LCD blank but not cleared
+    void visible();                                         //LCD visible
     void cursorLeft(uint8_t);                               //Shift cursor left by n
     void cursorRight(uint8_t);                              //shif cursor right by n
 };

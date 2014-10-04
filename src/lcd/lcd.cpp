@@ -6,6 +6,48 @@
 #include "lcd.hpp"
 
 
+Lcd::Lcd() {
+    _delay_ms(1);
+    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6 | 1 << LCD_D5 | 1 << LCD_D4);
+    //LCP &= ~(1 << LCD_E | 1 << LCD_RW | 1 << LCD_RS);
+    LCP &= ~(1 << LCD_E | 1 << LCD_RS);
+    LDDR |= 1 << LCD_D7 | 1 << LCD_D6 | 1 << LCD_D5 | 1 << LCD_D4;
+    //LCDR |= 1 << LCD_E | 1 << LCD_RW | 1 << LCD_RS;
+    LCDR |= 1 << LCD_E | 1 << LCD_RS;
+
+    //---------one------
+    //4 bit mode
+    LDP |= (1 << LCD_D5 | 1 << LCD_D4);
+    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6);
+    LCP |= (1 << LCD_E);
+    _delay_ms(1);
+    LCP &= ~(1 << LCD_E);
+    _delay_ms(1);
+
+    //-----------two-----------
+    LDP |= (1 << LCD_D5 | 1 << LCD_D4);
+    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6);
+    LCP|= (1 << LCD_E);
+    _delay_ms(1);
+    LCP &= ~(1 << LCD_E);
+    _delay_ms(1);
+
+    //-------three-------------
+    LDP |= (1 << LCD_D5);
+    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6 | 1 << LCD_D4);
+    LCP|= (1 << LCD_E);
+    _delay_ms(1);
+    LCP &= ~(1 << LCD_E);
+    _delay_ms(1);
+
+    //--------4 bit--dual line---------------
+    sendCommand(0b00101000);
+
+    //-----increment address, cursor shift------
+    sendCommand(0b00001110);
+}
+
+
 void Lcd::sendChar(uint8_t ch) {
     LDP &= ~((0b11110000) >> (4 - LCD_D4));
     LDP |= ((ch&0b11110000) >> (4 - LCD_D4));
@@ -45,48 +87,6 @@ void Lcd::sendCommand(uint8_t cmd) {
     _delay_ms(1);
     LCP &= ~(1 << LCD_E);
     _delay_ms(1);
-}
-
-
-void Lcd::init() {
-    _delay_ms(1);
-    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6 | 1 << LCD_D5 | 1 << LCD_D4);
-    //LCP &= ~(1 << LCD_E | 1 << LCD_RW | 1 << LCD_RS);
-    LCP &= ~(1 << LCD_E | 1 << LCD_RS);
-    LDDR |= 1 << LCD_D7 | 1 << LCD_D6 | 1 << LCD_D5 | 1 << LCD_D4;
-    //LCDR |= 1 << LCD_E | 1 << LCD_RW | 1 << LCD_RS;
-    LCDR |= 1 << LCD_E | 1 << LCD_RS;
-
-    //---------one------
-    //4 bit mode
-    LDP |= (1 << LCD_D5 | 1 << LCD_D4);
-    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6);
-    LCP |= (1 << LCD_E);
-    _delay_ms(1);
-    LCP &= ~(1 << LCD_E);
-    _delay_ms(1);
-
-    //-----------two-----------
-    LDP |= (1 << LCD_D5 | 1 << LCD_D4);
-    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6);
-    LCP|= (1 << LCD_E);
-    _delay_ms(1);
-    LCP &= ~(1 << LCD_E);
-    _delay_ms(1);
-
-    //-------three-------------
-    LDP |= (1 << LCD_D5);
-    LDP &= ~(1 << LCD_D7 | 1 << LCD_D6 | 1 << LCD_D4);
-    LCP|= (1 << LCD_E);
-    _delay_ms(1);
-    LCP &= ~(1 << LCD_E);
-    _delay_ms(1);
-
-    //--------4 bit--dual line---------------
-    sendCommand(0b00101000);
-
-    //-----increment address, cursor shift------
-    sendCommand(0b00001110);
 }
 
 
@@ -156,7 +156,7 @@ void Lcd::copyStringToLcd(const uint8_t *flash_loc, uint8_t x, uint8_t y) {
 //LCDdefinechar(backslash,0);
 
 
-void Lcd::definechar(const uint8_t *pc, uint8_t char_code) {
+void Lcd::defineChar(const uint8_t *pc, uint8_t char_code) {
     uint8_t a;
     uint8_t pcc;
     uint16_t i;
